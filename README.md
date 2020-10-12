@@ -1,1 +1,3 @@
-# code_snippets_server
+## CodeSnippets Backend
+
+```npm run dev```
