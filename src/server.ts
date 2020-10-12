@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors'
 import snippetRouter from './snippets/snippets.router';
 
 export default class Server {
@@ -24,6 +25,7 @@ export default class Server {
 
   public bootstrap(): any {
     this.app.use(bodyParser.json());
+    this.app.use(cors());
     this.initRoutes(this.routes);
 
     try {
