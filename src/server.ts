@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors'
 import snippetRouter from './snippets/snippets.router';
+import mongoose from 'mongoose'
 
 export default class Server {
   private app: Application;
@@ -17,9 +18,15 @@ export default class Server {
     ];
   }
 
-  private initRoutes(routes: Array<any>) {
+  private initRoutes(routes: Array<any>): any {
     routes.forEach((route) => {
       this.app.use(route.path, route.handler)
+    });
+  }
+
+  private initDB(): any {
+    return mongoose.connect('mongodb://database/code-snippets', {
+      useMongoClient: true
     });
   }
 
@@ -27,13 +34,16 @@ export default class Server {
     this.app.use(bodyParser.json());
     this.app.use(cors());
     this.initRoutes(this.routes);
-
-    try {
-      this.app.listen(3000, () => {
-        console.log("Servidor rodando")
-      });
-    } catch(e) {
-      console.log(e);
-    }
+    this.initDB().then(() => {
+      console.log("MongoDB connected")
+    }).then(() => {
+      try {
+        this.app.listen(3000, () => {
+          console.log("Server listening port 3000")
+        });
+      } catch(e) {
+        console.log(e);
+      }
+    });
   }
 }
