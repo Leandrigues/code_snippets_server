@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from 'express';
+import { Snippet } from './snippets.model'
 
 const snippetRouter = express.Router()
 
@@ -107,9 +108,25 @@ const snippets = [
     likes: 75
     },
 ]
+
 snippetRouter.get('/', (req: Request, res: Response) => {
-  res.send(snippets);
+  Snippet.find({}).then((response) => {
+    res.send(response)
+  })
 });
 
+snippetRouter.get('/:id', (req: Request, res: Response) => {
+  Snippet.find({_id: req.params.id}).then((response) => {
+    res.send(response)
+  })
+});
+
+snippetRouter.post('/', (req: Request, res: Response) => {
+  let snippet = new Snippet(req.body)
+
+  snippet.save(req.body).then((response) => {
+    res.send(response)
+  })
+});
 
 export default snippetRouter;

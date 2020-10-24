@@ -26,7 +26,6 @@ export default class Server {
 
   private initDB(): any {
     return mongoose.connect('mongodb://database/code-snippets', {
-      useMongoClient: true
     });
   }
 
